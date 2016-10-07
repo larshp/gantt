@@ -16,8 +16,12 @@ function handleError(evt, callback, json) {
 class REST {
   static root = base + "/rest/";
 
-  static listRepositories(callback) {
-    this.get("list", callback);
+  static listProjects(callback) {
+    this.get("projects", callback);
+  }
+
+  static listTasks(projectId, callback) {
+    this.get("tasks/" + projectId, callback);
   }
 
   static get(folder, callback, json = true) {
@@ -53,10 +57,35 @@ class Spinner extends React.Component {
     return (<div className="sk-rotating-plane"></div>);
   }
 }  
-           
-class Front extends React.Component {
+
+class Project extends React.Component {
+  render() {
+    return (<div>
+            <h1>Project</h1>
+            todo
+            </div>);
+  }
+}            
+            
+class ProjectList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {result: null};
+    REST.listProjects(this.callback.bind(this));      
+  }            
+
+  callback(d) {
+    this.setState({result: d});
+  }      
+
+  renderItem(i) {
+    return (<div><Link to={ i.PROJECT_ID }>{ i.PROJECT_ID } { i.DESCRIPTION }</Link></div>);
+  }
+      
   render() {    
-    return (<div>hello world</div>);
+    return (<div><h1>Project List</h1>
+      {this.state.result==null?<Spinner />:this.state.result.map(this.renderItem.bind(this))}
+      </div>);
   }
 }                  
       
@@ -68,7 +97,10 @@ class Router extends React.Component {
     return (
       <ReactRouter.Router history={history} >
         <ReactRouter.Route path="/">
-          <ReactRouter.IndexRoute component={Front} />
+          <ReactRouter.IndexRoute component={ProjectList} />
+          <ReactRouter.Route path=":project">
+            <ReactRouter.IndexRoute component={Project} />
+          </ReactRouter.Route>
         </ReactRouter.Route>
         <ReactRouter.Route path="*" component={NoMatch} />
       </ReactRouter.Router>);

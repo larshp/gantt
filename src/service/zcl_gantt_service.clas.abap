@@ -7,8 +7,14 @@ public section.
   interfaces ZIF_SWAG_HANDLER .
   interfaces IF_HTTP_EXTENSION .
 
-  methods LIST_PROJECTS .
-  methods LIST_TASKS .
+  methods LIST_PROJECTS
+    returning
+      value(RT_LIST) type ZGANTT_PROJECTS_TT .
+  methods LIST_TASKS
+    importing
+      !IV_PROJECT_ID type ZGANTT_PROJECT_ID
+    returning
+      value(RT_LIST) type ZGANTT_TASK_LIST_TT .
 protected section.
 
   data MI_SERVER type ref to IF_HTTP_SERVER .
@@ -45,12 +51,18 @@ mi_server = server.
   ENDMETHOD.
 
 
-  method LIST_PROJECTS.
-  endmethod.
+  METHOD list_projects.
+
+    rt_list = zcl_gantt_project=>list( ).
+
+  ENDMETHOD.
 
 
-  method LIST_TASKS.
-  endmethod.
+  METHOD list_tasks.
+
+    rt_list = zcl_gantt_task=>list( iv_project_id ).
+
+  ENDMETHOD.
 
 
   METHOD read_mime.
@@ -144,16 +156,23 @@ mi_server = server.
   ENDMETHOD.
 
 
-  METHOD ZIF_SWAG_HANDLER~META.
+  METHOD zif_swag_handler~meta.
 
     FIELD-SYMBOLS: <ls_meta> LIKE LINE OF rt_meta.
 
 
     APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
     <ls_meta>-summary   = 'List Projects'.
-    <ls_meta>-url-regex = '/list$'.
+    <ls_meta>-url-regex = '/projects$'.
     <ls_meta>-method    = zcl_swag=>c_method-get.
     <ls_meta>-handler   = 'LIST_PROJECTS'.
+
+    APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
+    <ls_meta>-summary   = 'List Tasks'.
+    <ls_meta>-url-regex = '/tasks/(\d+)$'.
+    APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
+    <ls_meta>-method    = zcl_swag=>c_method-get.
+    <ls_meta>-handler   = 'LIST_TASKS'.
 
   ENDMETHOD.
 ENDCLASS.
