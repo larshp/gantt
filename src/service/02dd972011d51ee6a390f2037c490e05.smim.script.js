@@ -13,6 +13,14 @@ function handleError(evt, callback, json) {
   }
 }
 
+class Time {
+  static get() {
+    let value = new Date().toJSON().slice(0,16);
+    console.dir(value);
+    return value;
+  }
+}
+
 class REST {
   static root = base + "/rest/";
 
@@ -22,6 +30,10 @@ class REST {
 
   static listTasks(projectId, callback) {
     this.get("tasks/" + projectId, callback);
+  }
+
+  static readTask(projectId, taskId, callback) {
+    this.get("tasks/" + projectId + "/" + taskId, callback);
   }
 
   static get(folder, callback, json = true) {
@@ -51,48 +63,153 @@ class Spinner extends React.Component {
   }
 }  
 
-class TaskFields extends React.Component {
-  data;
-            
-  render() { 
-    return (<div>
-      DESCRIPTION<br />
-      ESTIMATE<br />
-      ACTUAL_START<br />
-      ACTUAL_END<br />
-      START_TIME<br />
-      Dependencies<br />
-      </div>); 
+class TaskFields extends React.Component {       
+  constructor(props) {
+    super(props);    
+    this.state = {data: this.props.data};
+  }         
+
+  updateDescription(e) {
+    let data = this.state.data;
+    data.HEADER.DESCRIPTION = e.target.value;
+    this.setState(data);
+  }   
+      
+  updateEstimate(e) {
+    let data = this.state.data;
+    data.HEADER.ESTIMATE = e.target.value;
+    this.setState(data);
+  }     
+      
+  updateActualStart(e) {
+    setActualStart(e.target.value);
+  }        
+
+  setActualStart(value) {
+    let data = this.state.data;
+    data.HEADER.ACTUAL_START = value?value:Time.get();
+    this.setState(data);
+  }      
+      
+  updateActualEnd(e) {
+    setActualEnd(e.target.value);
+  }        
+      
+  setActualEnd(value) {
+    let data = this.state.data;
+    data.HEADER.ACTUAL_END = value?value:Time.get();
+    this.setState(data);
+  }        
+      
+  updatePlannedStart(e) {
+    let data = this.state.data;
+    data.HEADER.PLANNED_START = e.target.value;
+    this.setState(data);
+  }        
+      
+  render() {     
+    let readOnly = this.props.readOnly?"readonly":"";
+        
+    return (
+      <table>
+      <tr>
+      <td>Description</td>
+      <td><input type="text" value={this.state.data.HEADER.DESCRIPTION} onChange={ this.updateDescription.bind(this) } readOnly={ this.props.readOnly } /></td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Estimate</td>
+      <td><input type="number" value={this.state.data.HEADER.ESTIMATE} onChange={ this.updateEstimate.bind(this) } readOnly={ this.props.readOnly } /></td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Actual start</td>
+      <td><input type="datetime-local" value={this.state.data.HEADER.ACTUAL_START} onChange={ this.updateActualStart.bind(this) } readOnly={ this.props.readOnly } /></td>
+      <td><input type="button" value="Set" onClick={ () => { this.setActualStart(); } } disabled={ this.props.readOnly } /></td>
+      </tr>
+      <tr>
+      <td>Actual end</td>
+      <td><input type="datetime-local" value={this.state.data.HEADER.ACTUAL_END} onChange={ this.updateActualEnd.bind(this) } readOnly={ this.props.readOnly } /></td>
+      <td><input type="button" value="Set" onClick={ () => { this.setActualEnd(); } } disabled={ this.props.readOnly } /></td>
+      </tr>
+      <tr>
+      <td>Planned start</td>
+      <td><input type="datetime-local" value={this.state.data.HEADER.PLANNED_START} onChange={ this.updatePlannedStart.bind(this) } readOnly={ this.props.readOnly } /></td>
+      <td></td>
+      </tr>
+      <tr>
+      <td align="top">Dependencies</td>
+      <td>
+      <select name="dependencies" multiple disabled={ this.props.readOnly }>
+      <option value="volvo" selected>Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="opel">Opel</option>
+      <option value="audi">Audi</option>
+      </select>
+      </td>
+      <td></td>
+      </tr>
+      </table>
+      ); 
   }
 }
             
-class NewTask extends React.Component {     
+class NewTask extends React.Component {
+  data;
+
+  constructor(props) {
+    super(props);
+    this.data = { HEADER: {} };
+  }
+          
   render() {
     return (<div>
             <h1>Project { this.props.params.project } - New Task</h1>
-            todo
-            <TaskFields />
+            <TaskFields data={ this.data } />
+            <Link to={ "todo" }>create</Link> 
             </div>);
   }
 }             
             
-class DisplayTask extends React.Component {     
+class DisplayTask extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {result: null};
+    REST.readTask(this.props.params.project, this.props.params.task, this.callback.bind(this));      
+  }              
+
+  callback(d) {
+    this.setState({result: d});
+  }  
+      
   render() {
+    let link = this.props.params.project + "/" + this.props.params.task;
+    
     return (<div>
-            <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
-            display
-            <TaskFields />
-            </div>);
+      <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
+      {this.state.result==null?<Spinner />:<TaskFields data={ this.state.result } readOnly={ true } />}
+      <Link to={ link + "/edit" }>edit</Link>            
+      </div>);
   }
 }              
 
 class EditTask extends React.Component {     
+  constructor(props) {
+    super(props);
+    this.state = {result: null};
+    REST.readTask(this.props.params.project, this.props.params.task, this.callback.bind(this));      
+  }              
+
+  callback(d) {
+    this.setState({result: d});
+  }  
+    
   render() {
     return (<div>
-            <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
-            edit
-            <TaskFields />
-            </div>);
+      <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
+      {this.state.result==null?<Spinner />:<TaskFields data={ this.state.result } />}
+      <Link to="todo">save</Link>  
+      </div>);
   }
 }             
             

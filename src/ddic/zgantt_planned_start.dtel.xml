@@ -3,21 +3,21 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DD04V>
-    <ROLLNAME>ZGANTT_START_TIME</ROLLNAME>
+    <ROLLNAME>ZGANTT_PLANNED_START</ROLLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DOMNAME>ZGANTT_TIMESTAMP</DOMNAME>
     <ROUTPUTLEN>000000</ROUTPUTLEN>
     <MEMORYID/>
     <LOGFLAG/>
-    <HEADLEN>10</HEADLEN>
+    <HEADLEN>19</HEADLEN>
     <SCRLEN1>10</SCRLEN1>
-    <SCRLEN2>10</SCRLEN2>
-    <SCRLEN3>10</SCRLEN3>
-    <DDTEXT>Start time</DDTEXT>
-    <REPTEXT>Start time</REPTEXT>
-    <SCRTEXT_S>Start time</SCRTEXT_S>
-    <SCRTEXT_M>Start time</SCRTEXT_M>
-    <SCRTEXT_L>Start time</SCRTEXT_L>
+    <SCRLEN2>20</SCRLEN2>
+    <SCRLEN3>40</SCRLEN3>
+    <DDTEXT>Planned start</DDTEXT>
+    <REPTEXT>Planned start</REPTEXT>
+    <SCRTEXT_S>Planned st</SCRTEXT_S>
+    <SCRTEXT_M>Planned start</SCRTEXT_M>
+    <SCRTEXT_L>Planned start</SCRTEXT_L>
     <ACTFLAG/>
     <APPLCLASS/>
     <AUTHCLASS>00</AUTHCLASS>

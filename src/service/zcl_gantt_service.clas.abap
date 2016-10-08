@@ -10,7 +10,9 @@ public section.
   methods NEW_TASK
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
-      !IS_TASK type CHAR1 .
+      !IS_TASK type ZGANTT_TASK_DATA
+    returning
+      value(RV_TASK_ID) type ZGANTT_TASK_ID .
   methods READ_TASK
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
@@ -19,7 +21,8 @@ public section.
       value(RS_TASK) type ZGANTT_TASK_DATA .
   methods UPDATE_TASK
     importing
-      !IV_PROJECT_ID type ZGANTT_PROJECT_ID .
+      !IV_PROJECT_ID type ZGANTT_PROJECT_ID
+      !IS_TASK type ZGANTT_TASK_DATA .
   methods LIST_PROJECTS
     returning
       value(RT_LIST) type ZGANTT_PROJECTS_TT .
@@ -78,8 +81,11 @@ mi_server = server.
   ENDMETHOD.
 
 
-  method NEW_TASK.
-  endmethod.
+  METHOD new_task.
+
+* todo
+
+  ENDMETHOD.
 
 
   METHOD read_mime.
@@ -189,8 +195,11 @@ mi_server = server.
   ENDMETHOD.
 
 
-  method UPDATE_TASK.
-  endmethod.
+  METHOD update_task.
+
+* todo
+
+  ENDMETHOD.
 
 
   METHOD zif_swag_handler~meta.
