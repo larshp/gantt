@@ -36,14 +36,7 @@ class REST {
     oReq.addEventListener("load", (evt) => { handleError(evt, callback, false); });
     oReq.open("POST", this.root + folder);
     oReq.send(JSON.stringify(data));
-  }
-      
-  static put(folder, callback, data) {
-    let oReq = new XMLHttpRequest();
-    oReq.addEventListener("load", (evt) => { handleError(evt, callback, false); });
-    oReq.open("PUT", this.root + folder);
-    oReq.send(JSON.stringify(data));
-  }      
+  }    
 }
 
 class NoMatch extends React.Component {
@@ -58,11 +51,62 @@ class Spinner extends React.Component {
   }
 }  
 
-class Project extends React.Component {
+class NewTask extends React.Component {     
   render() {
     return (<div>
-            <h1>Project</h1>
+            <h1>Project { this.props.params.project } - New Task</h1>
             todo
+            </div>);
+  }
+}             
+            
+class DisplayTask extends React.Component {     
+  render() {
+    return (<div>
+            <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
+            display
+            </div>);
+  }
+}              
+
+class EditTask extends React.Component {     
+  render() {
+    return (<div>
+            <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
+            edit
+            </div>);
+  }
+}             
+            
+class Project extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {result: null};
+    REST.listTasks(this.props.params.project, this.callback.bind(this));      
+  }              
+
+  callback(d) {
+    this.setState({result: d});
+  }        
+
+  renderItem(i) {
+    let link = this.props.params.project + "/" + i.HEADER.TASK_ID;
+    return (<tr>
+            <td><Link to={ link }>{ i.HEADER.TASK_ID } { i.HEADER.DESCRIPTION }</Link></td>
+            <td><Link to={ link + "/edit" }>edit</Link></td>
+            </tr>);
+  }      
+  
+  renderItemList() {
+    return (<table>{ this.state.result.map(this.renderItem.bind(this)) }</table>);
+  }      
+      
+  render() {
+    return (<div>
+            <h1>Project { this.props.params.project }</h1>
+            {this.state.result==null?<Spinner />:this.renderItemList()}
+            <br />
+            <Link to={ this.props.params.project + "/new" }>New task</Link>
             </div>);
   }
 }            
@@ -100,6 +144,15 @@ class Router extends React.Component {
           <ReactRouter.IndexRoute component={ProjectList} />
           <ReactRouter.Route path=":project">
             <ReactRouter.IndexRoute component={Project} />
+            <ReactRouter.Route path="new">
+              <ReactRouter.IndexRoute component={NewTask} />
+            </ReactRouter.Route>       
+            <ReactRouter.Route path=":task">
+              <ReactRouter.IndexRoute component={DisplayTask} />
+              <ReactRouter.Route path="edit">
+                <ReactRouter.IndexRoute component={EditTask} />
+              </ReactRouter.Route>           
+            </ReactRouter.Route>     
           </ReactRouter.Route>
         </ReactRouter.Route>
         <ReactRouter.Route path="*" component={NoMatch} />

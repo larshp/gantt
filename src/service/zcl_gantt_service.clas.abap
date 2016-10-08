@@ -7,6 +7,13 @@ public section.
   interfaces ZIF_SWAG_HANDLER .
   interfaces IF_HTTP_EXTENSION .
 
+  methods NEW_TASK
+    importing
+      !IV_PROJECT_ID type ZGANTT_PROJECT_ID
+      !IS_TASK type CHAR1 .
+  methods UPDATE_TASK
+    importing
+      !IV_PROJECT_ID type ZGANTT_PROJECT_ID .
   methods LIST_PROJECTS
     returning
       value(RT_LIST) type ZGANTT_PROJECTS_TT .
@@ -14,7 +21,7 @@ public section.
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
     returning
-      value(RT_LIST) type ZGANTT_TASK_LIST_TT .
+      value(RT_LIST) type ZGANTT_TASK_DATA_TT .
 protected section.
 
   data MI_SERVER type ref to IF_HTTP_SERVER .
@@ -63,6 +70,10 @@ mi_server = server.
     rt_list = zcl_gantt_task=>list( iv_project_id ).
 
   ENDMETHOD.
+
+
+  method NEW_TASK.
+  endmethod.
 
 
   METHOD read_mime.
@@ -156,6 +167,10 @@ mi_server = server.
   ENDMETHOD.
 
 
+  method UPDATE_TASK.
+  endmethod.
+
+
   METHOD zif_swag_handler~meta.
 
     FIELD-SYMBOLS: <ls_meta> LIKE LINE OF rt_meta.
@@ -173,6 +188,29 @@ mi_server = server.
     APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
     <ls_meta>-method    = zcl_swag=>c_method-get.
     <ls_meta>-handler   = 'LIST_TASKS'.
+
+    APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
+    <ls_meta>-summary   = 'Read Task'.
+    <ls_meta>-url-regex = '/tasks/(\d+)/(\d+)$'.
+    APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
+    APPEND 'IV_TASK_ID' TO <ls_meta>-url-group_names.
+    <ls_meta>-method    = zcl_swag=>c_method-get.
+    <ls_meta>-handler   = 'LIST_TASKS'.
+
+    APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
+    <ls_meta>-summary   = 'New Task'.
+    <ls_meta>-url-regex = '/tasks/$'.
+    APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
+    <ls_meta>-method    = zcl_swag=>c_method-post.
+    <ls_meta>-handler   = 'NEW_TASK'.
+
+    APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
+    <ls_meta>-summary   = 'Update Task'.
+    <ls_meta>-url-regex = '/tasks/(\d+)/(\d+)$'.
+    APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
+    APPEND 'IV_TASK_ID' TO <ls_meta>-url-group_names.
+    <ls_meta>-method    = zcl_swag=>c_method-post.
+    <ls_meta>-handler   = 'UPDATE_TASK'.
 
   ENDMETHOD.
 ENDCLASS.
