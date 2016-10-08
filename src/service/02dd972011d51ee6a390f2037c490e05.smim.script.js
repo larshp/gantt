@@ -154,7 +154,7 @@ class TaskFields extends React.Component {
   }
 }
             
-class NewTask extends React.Component {
+class CreateTask extends React.Component {
   data;
 
   constructor(props) {
@@ -164,7 +164,7 @@ class NewTask extends React.Component {
           
   render() {
     return (<div>
-            <h1>Project { this.props.params.project } - New Task</h1>
+            <h1>Project { this.props.params.project } - Create Task</h1>
             <TaskFields data={ this.data } />
             <Link to={ "todo" }>create</Link> 
             </div>);
@@ -241,7 +241,7 @@ class Project extends React.Component {
             <h1>Project { this.props.params.project }</h1>
             {this.state.result==null?<Spinner />:this.renderItemList()}
             <br />
-            <Link to={ this.props.params.project + "/new" }>New task</Link>
+            <Link to={ this.props.params.project + "/create" }>Create task</Link>
             </div>);
   }
 }            
@@ -279,8 +279,8 @@ class Router extends React.Component {
           <ReactRouter.IndexRoute component={ProjectList} />
           <ReactRouter.Route path=":project">
             <ReactRouter.IndexRoute component={Project} />
-            <ReactRouter.Route path="new">
-              <ReactRouter.IndexRoute component={NewTask} />
+            <ReactRouter.Route path="create">
+              <ReactRouter.IndexRoute component={CreateTask} />
             </ReactRouter.Route>       
             <ReactRouter.Route path=":task">
               <ReactRouter.IndexRoute component={DisplayTask} />

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_NROB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <OBJECT>ZGANTT_PRO</OBJECT>
+    <DTELSOBJ/>
+    <NRTAB/>
+    <NRINTFLD/>
+    <NREXTFLD/>
+    <NRFLD/>
+    <NRSOBJFLD/>
+    <NRELEFLD/>
+    <YEARIND/>
+    <DOMLEN>ZGANTT_PROJECT_ID</DOMLEN>
+    <PERCENTAGE>10.0</PERCENTAGE>
+    <CODE/>
+    <TEXTIND/>
+    <NRELTXTTAB/>
+    <NRELTXTSOB/>
+    <NRELTXTELE/>
+    <NRELTXTTXT/>
+    <NRELTXTLNG/>
+    <BUFFER/>
+    <NOIVBUFFER>00000000</NOIVBUFFER>
+    <NONRSWAP/>
+    <RFCDEST/>
+    <NRCHECKASCII/>
+   </ATTRIBUTES>
+   <TEXT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZGANTT_PRO</OBJECT>
+    <TXT>Project Id</TXT>
+    <TXTSHORT>Project Id</TXTSHORT>
+   </TEXT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

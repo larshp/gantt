@@ -9,6 +9,11 @@ public section.
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
     returning
       value(RT_LIST) type ZGANTT_TASK_DATA_TT .
+  class-methods CREATE
+    importing
+      !IS_DATA type ZGANTT_TASKS_DATA
+    returning
+      value(RV_TASK_ID) type ZGANTT_TASKS-TASK_ID .
 protected section.
 private section.
 ENDCLASS.
@@ -16,6 +21,27 @@ ENDCLASS.
 
 
 CLASS ZCL_GANTT_TASK IMPLEMENTATION.
+
+
+  METHOD create.
+
+    DATA: ls_data TYPE zgantt_tasks.
+
+
+    zcl_gantt_number_range=>number_get_next(
+      EXPORTING
+        iv_nrrangenr = '01'
+        iv_object    = 'ZGANTT_TAS'
+      IMPORTING
+        ev_id        = ls_data-project_id ).
+    MOVE-CORRESPONDING is_data TO ls_data.
+
+    INSERT zgantt_tasks FROM ls_data.
+    ASSERT sy-subrc = 0.
+
+    rv_task_id = ls_data-task_id.
+
+  ENDMETHOD.
 
 
   METHOD list.
@@ -36,7 +62,6 @@ CLASS ZCL_GANTT_TASK IMPLEMENTATION.
 
     SELECT * FROM zgantt_deps
       INTO TABLE lt_deps
-      WHERE project_id = iv_project_id
       ORDER BY PRIMARY KEY.
 
     LOOP AT lt_tasks ASSIGNING <ls_task>.

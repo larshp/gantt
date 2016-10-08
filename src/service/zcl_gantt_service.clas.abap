@@ -7,7 +7,7 @@ public section.
   interfaces ZIF_SWAG_HANDLER .
   interfaces IF_HTTP_EXTENSION .
 
-  methods NEW_TASK
+  methods CREATE_TASK
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
       !IS_TASK type ZGANTT_TASK_DATA
@@ -31,6 +31,11 @@ public section.
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
     returning
       value(RT_LIST) type ZGANTT_TASK_DATA_TT .
+  methods CREATE_PROJECT
+    importing
+      !IS_DATA type ZGANTT_PROJECTS_DATA
+    returning
+      value(RV_PROJECT_ID) type ZGANTT_PROJECTS-PROJECT_ID .
 protected section.
 
   data MI_SERVER type ref to IF_HTTP_SERVER .
@@ -46,6 +51,20 @@ ENDCLASS.
 
 
 CLASS ZCL_GANTT_SERVICE IMPLEMENTATION.
+
+
+  METHOD create_project.
+
+    rv_project_id = zcl_gantt_project=>create( is_data ).
+
+  ENDMETHOD.
+
+
+  METHOD CREATE_TASK.
+
+* todo
+
+  ENDMETHOD.
 
 
   METHOD if_http_extension~handle_request.
@@ -77,13 +96,6 @@ mi_server = server.
   METHOD list_tasks.
 
     rt_list = zcl_gantt_task=>list( iv_project_id ).
-
-  ENDMETHOD.
-
-
-  METHOD new_task.
-
-* todo
 
   ENDMETHOD.
 
@@ -214,6 +226,12 @@ mi_server = server.
     <ls_meta>-handler   = 'LIST_PROJECTS'.
 
     APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
+    <ls_meta>-summary   = 'Create Project'.
+    <ls_meta>-url-regex = '/projects$'.
+    <ls_meta>-method    = zcl_swag=>c_method-post.
+    <ls_meta>-handler   = 'CREATE_PROJECT'.
+
+    APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
     <ls_meta>-summary   = 'List Tasks'.
     <ls_meta>-url-regex = '/tasks/(\d+)$'.
     APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
@@ -229,11 +247,11 @@ mi_server = server.
     <ls_meta>-handler   = 'READ_TASK'.
 
     APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
-    <ls_meta>-summary   = 'New Task'.
-    <ls_meta>-url-regex = '/tasks/$'.
+    <ls_meta>-summary   = 'Create Task'.
+    <ls_meta>-url-regex = '/tasks$'.
     APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
     <ls_meta>-method    = zcl_swag=>c_method-post.
-    <ls_meta>-handler   = 'NEW_TASK'.
+    <ls_meta>-handler   = 'CREATE_TASK'.
 
     APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
     <ls_meta>-summary   = 'Update Task'.
