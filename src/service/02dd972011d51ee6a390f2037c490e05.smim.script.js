@@ -245,7 +245,16 @@ class Project extends React.Component {
             </div>);
   }
 }            
-            
+
+class CreateProject extends React.Component {
+  render() {
+    return (<div>
+      <h1>Create Project</h1>
+      create
+      </div>);
+  }
+}    
+    
 class ProjectList extends React.Component {
   constructor(props) {
     super(props);
@@ -264,6 +273,8 @@ class ProjectList extends React.Component {
   render() {    
     return (<div><h1>Project List</h1>
       {this.state.result==null?<Spinner />:this.state.result.map(this.renderItem.bind(this))}
+      <br />
+      <Link to="create">Create Project</Link>
       </div>);
   }
 }                  
@@ -277,6 +288,9 @@ class Router extends React.Component {
       <ReactRouter.Router history={history} >
         <ReactRouter.Route path="/">
           <ReactRouter.IndexRoute component={ProjectList} />
+            <ReactRouter.Route path="create">
+              <ReactRouter.IndexRoute component={CreateProject} />
+            </ReactRouter.Route>        
           <ReactRouter.Route path=":project">
             <ReactRouter.IndexRoute component={Project} />
             <ReactRouter.Route path="create">
