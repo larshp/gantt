@@ -11,6 +11,12 @@ public section.
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID
       !IS_TASK type CHAR1 .
+  methods READ_TASK
+    importing
+      !IV_PROJECT_ID type ZGANTT_PROJECT_ID
+      !IV_TASK_ID type ZGANTT_TASK_ID
+    returning
+      value(RS_TASK) type ZGANTT_TASK_DATA .
   methods UPDATE_TASK
     importing
       !IV_PROJECT_ID type ZGANTT_PROJECT_ID .
@@ -129,6 +135,22 @@ mi_server = server.
   ENDMETHOD.
 
 
+  METHOD read_task.
+
+    DATA: lt_list TYPE zgantt_task_data_tt.
+
+
+    lt_list = zcl_gantt_task=>list( iv_project_id ).
+
+    READ TABLE lt_list
+      INTO rs_task
+      WITH KEY header-project_id = iv_project_id
+      header-task_id = iv_task_id.
+    ASSERT sy-subrc = 0.
+
+  ENDMETHOD.
+
+
   METHOD serve_rest.
 
     DATA: lo_swag TYPE REF TO zcl_swag.
@@ -195,7 +217,7 @@ mi_server = server.
     APPEND 'IV_PROJECT_ID' TO <ls_meta>-url-group_names.
     APPEND 'IV_TASK_ID' TO <ls_meta>-url-group_names.
     <ls_meta>-method    = zcl_swag=>c_method-get.
-    <ls_meta>-handler   = 'LIST_TASKS'.
+    <ls_meta>-handler   = 'READ_TASK'.
 
     APPEND INITIAL LINE TO rt_meta ASSIGNING <ls_meta>.
     <ls_meta>-summary   = 'New Task'.

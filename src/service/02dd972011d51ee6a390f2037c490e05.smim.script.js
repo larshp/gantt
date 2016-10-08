@@ -51,11 +51,27 @@ class Spinner extends React.Component {
   }
 }  
 
+class TaskFields extends React.Component {
+  data;
+            
+  render() { 
+    return (<div>
+      DESCRIPTION<br />
+      ESTIMATE<br />
+      ACTUAL_START<br />
+      ACTUAL_END<br />
+      START_TIME<br />
+      Dependencies<br />
+      </div>); 
+  }
+}
+            
 class NewTask extends React.Component {     
   render() {
     return (<div>
             <h1>Project { this.props.params.project } - New Task</h1>
             todo
+            <TaskFields />
             </div>);
   }
 }             
@@ -65,6 +81,7 @@ class DisplayTask extends React.Component {
     return (<div>
             <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
             display
+            <TaskFields />
             </div>);
   }
 }              
@@ -74,6 +91,7 @@ class EditTask extends React.Component {
     return (<div>
             <h1>Project { this.props.params.project } - Task { this.props.params.task }</h1>
             edit
+            <TaskFields />
             </div>);
   }
 }             
