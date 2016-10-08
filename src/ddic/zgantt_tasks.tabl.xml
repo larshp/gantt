@@ -120,7 +120,7 @@
      <RESERVEDOM/>
      <DOMGLOBAL/>
      <DOMNAME3L/>
-     <SHLPORIGIN>D</SHLPORIGIN>
+     <SHLPORIGIN/>
      <SHLPNAME/>
      <SHLPFIELD/>
      <TABLETYPE/>
@@ -264,7 +264,7 @@
      <RESERVEDOM/>
      <DOMGLOBAL/>
      <DOMNAME3L/>
-     <SHLPORIGIN>D</SHLPORIGIN>
+     <SHLPORIGIN/>
      <SHLPNAME/>
      <SHLPFIELD/>
      <TABLETYPE/>
