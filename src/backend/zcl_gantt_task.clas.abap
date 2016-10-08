@@ -36,6 +36,13 @@ CLASS ZCL_GANTT_TASK IMPLEMENTATION.
         ev_id        = ls_data-project_id ).
     MOVE-CORRESPONDING is_data TO ls_data.
 
+    ls_data-created_by = sy-uname.
+    ls_data-created_at = zcl_gantt_time=>get( ).
+    ls_data-changed_by = sy-uname.
+    ls_data-changed_at = zcl_gantt_time=>get( ).
+
+* todo, validations?
+
     INSERT zgantt_tasks FROM ls_data.
     ASSERT sy-subrc = 0.
 
