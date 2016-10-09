@@ -23,6 +23,8 @@
     }      
     </style>    
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,700|Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.css">  
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.1/react.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js"></script>
@@ -33,6 +35,9 @@
   </head>
   <body>
     <div id="app"></div>
+    <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    </script>    
     <script type="text/babel" src="/sap/zgantt/static/script.js"></script>
   </body>
 </html>

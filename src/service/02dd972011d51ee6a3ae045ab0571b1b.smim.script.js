@@ -16,9 +16,11 @@ function handleError(evt, callback, json) {
 class Time {
   static get() {
     let value = new Date().toJSON().slice(0,16);
-    console.dir(value);
     return value;
   }
+  static hoursToMilliseconds(hours) {
+    return hours * 60 * 60 * 1000;
+  } 
 }
 
 class REST {
@@ -219,7 +221,7 @@ class Project extends React.Component {
     this.state = {result: null};
     REST.listTasks(this.props.params.project, this.callback.bind(this));      
   }              
-
+    
   callback(d) {
     this.setState({result: d});
   }        
@@ -233,16 +235,47 @@ class Project extends React.Component {
   }      
   
   renderItemList() {
+    google.charts.setOnLoadCallback(this.drawChart);      
     return (<table>{ this.state.result.map(this.renderItem.bind(this)) }</table>);
   }      
       
+  drawChart() {
+    var data = new google.visualization.DataTable();
+      
+    data.addColumn('string', 'Task ID');
+    data.addColumn('string', 'Task Name');
+    data.addColumn('string', 'Resource');
+    data.addColumn('date', 'Start Date');
+    data.addColumn('date', 'End Date');
+    data.addColumn('number', 'Duration');
+    data.addColumn('number', 'Percent Complete');
+    data.addColumn('string', 'Dependencies');
+      
+    data.addRows([
+        ['39-01', '39-01', null, new Date(2015, 0, 1), null, Time.hoursToMilliseconds(2), 0, null],
+        ['03-01', '03-01', null, null, null, Time.hoursToMilliseconds(6),  0, '39-01'],
+        ['03-17', '03-17', null, null, null, Time.hoursToMilliseconds(2), 0, '39-01'],
+        ['02-01', '02-01', null, new Date(2015, 0, 1), null, Time.hoursToMilliseconds(2), 0, null],
+        ['03-32', '03-32', null, null, null, Time.hoursToMilliseconds(2), 0, '02-01'],
+        ['FICO', 'FI-CO', null, new Date(2015, 0, 1), null, Time.hoursToMilliseconds(2),  0, null],
+        ['03-02', '03-02', null, null, null, Time.hoursToMilliseconds(2), 0, 'FICO'],
+        ['03-04', '03-04', null, null, null, Time.hoursToMilliseconds(2), 0, '03-02'],
+      ]);
+      
+    var options = { height: 2000, width: 3000 };
+    var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+    chart.draw(data, options);       
+  }            
+            
   render() {
     return (<div>
-            <h1>Project { this.props.params.project }</h1>
-            {this.state.result==null?<Spinner />:this.renderItemList()}
-            <br />
-            <Link to={ this.props.params.project + "/create" }>Create task</Link>
-            </div>);
+      <h1>Project { this.props.params.project }</h1>
+      {this.state.result==null?<Spinner />:this.renderItemList()}
+      <br />
+      <Link to={ this.props.params.project + "/create" }>Create task</Link>
+      <br /><br /><br />
+      <div id="chart_div"></div>
+      </div>);
   }
 }            
 
