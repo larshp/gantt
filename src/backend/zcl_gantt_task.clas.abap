@@ -1,21 +1,21 @@
-class ZCL_GANTT_TASK definition
-  public
-  create public .
+CLASS zcl_gantt_task DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods LIST
-    importing
-      !IV_PROJECT_ID type ZGANTT_PROJECT_ID
-    returning
-      value(RT_LIST) type ZGANTT_TASK_DATA_TT .
-  class-methods CREATE
-    importing
-      !IS_DATA type ZGANTT_TASKS_DATA
-    returning
-      value(RV_TASK_ID) type ZGANTT_TASKS-TASK_ID .
-protected section.
-private section.
+    CLASS-METHODS list
+      IMPORTING
+        !iv_project_id TYPE zgantt_project_id
+      RETURNING
+        VALUE(rt_list) TYPE zgantt_task_data_tt .
+    CLASS-METHODS create
+      IMPORTING
+        !is_data          TYPE zgantt_tasks_data
+      RETURNING
+        VALUE(rv_task_id) TYPE zgantt_tasks-task_id .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -33,7 +33,7 @@ CLASS ZCL_GANTT_TASK IMPLEMENTATION.
         iv_nrrangenr = '01'
         iv_object    = 'ZGANTT_TAS'
       IMPORTING
-        ev_id        = ls_data-project_id ).
+        ev_id        = ls_data-task_id ).
     MOVE-CORRESPONDING is_data TO ls_data.
 
     ls_data-created_by = sy-uname.
@@ -42,6 +42,8 @@ CLASS ZCL_GANTT_TASK IMPLEMENTATION.
     ls_data-changed_at = zcl_gantt_time=>get( ).
 
 * todo, validations?
+    ASSERT NOT ls_data-project_id IS INITIAL.
+    ASSERT NOT ls_data-task_id IS INITIAL.
 
     INSERT zgantt_tasks FROM ls_data.
     ASSERT sy-subrc = 0.

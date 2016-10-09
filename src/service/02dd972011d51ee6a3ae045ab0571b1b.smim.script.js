@@ -247,10 +247,23 @@ class Project extends React.Component {
 }            
 
 class CreateProject extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: { DESCRIPTION: "" } };
+  }
+  
+  updateDescription(e) {
+    let data = this.state.data;
+    data.DESCRIPTION = e.target.value;
+    this.setState(data);    
+  }
+  
   render() {
     return (<div>
       <h1>Create Project</h1>
-      create
+      Description:<br />
+      <input type="text" value={this.state.data.DESCRIPTION} onChange={ this.updateDescription.bind(this) } /><br />
+      create(todo)
       </div>);
   }
 }    
