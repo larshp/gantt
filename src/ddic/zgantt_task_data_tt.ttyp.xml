@@ -14,8 +14,6 @@
     <DDTEXT>ZGANTT_TASK_DATA Table Type</DDTEXT>
     <REFTYPE>C</REFTYPE>
    </DD40V>
-   <DD42V/>
-   <DD43V/>
   </asx:values>
  </asx:abap>
 </abapGit>

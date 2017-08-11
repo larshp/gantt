@@ -54,7 +54,6 @@
      <COMPTYPE>S</COMPTYPE>
     </DD03P>
    </DD03P_TABLE>
-   <DD05M_TABLE/>
    <DD08V_TABLE>
     <DD08V>
      <TABNAME>ZGANTT_TASKS</TABNAME>
@@ -85,8 +84,6 @@
      <FIELDNAME>PROJECT_ID</FIELDNAME>
     </DD17V>
    </DD17V>
-   <DD35V_TALE/>
-   <DD36M/>
   </asx:values>
  </asx:abap>
 </abapGit>
